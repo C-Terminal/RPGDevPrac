@@ -16,9 +16,9 @@ MonoBehaviour:
   - uniqueID: 
     text: Persistent
     children: []
-  - uniqueID: 
+  - uniqueID: 2
     text: editable
     children: []
-  - uniqueID: 
+  - uniqueID: 3
     text: text
     children: []

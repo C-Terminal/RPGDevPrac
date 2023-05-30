@@ -11,6 +11,7 @@ namespace RPG.Dialogue
 
         public string uniqueID, text;
         public string[] children;
+        public Rect position;
 
     }
 }
