@@ -19,7 +19,9 @@ namespace RPG.Dialogue.Editor
 
         private void OnGUI()
         {
-
+            EditorGUILayout.LabelField("Apple");
+            EditorGUILayout.LabelField("Orange");
+            EditorGUILayout.LabelField("Pear");
         }
         [OnOpenAssetAttribute(1)]
         public static bool OnOpenAsset(int instanceID, int line)
