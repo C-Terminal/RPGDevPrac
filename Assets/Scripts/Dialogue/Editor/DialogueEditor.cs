@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -8,6 +6,7 @@ namespace RPG.Dialogue.Editor
 {
     public class DialogueEditor : EditorWindow
     {
+        Dialogue selectedDialogue = null;
 
         [MenuItem("Window/Dialogue Editor")]
         private static void ShowEditorWindow()
@@ -19,10 +18,30 @@ namespace RPG.Dialogue.Editor
 
         private void OnGUI()
         {
-            EditorGUILayout.LabelField("Apple");
-            EditorGUILayout.LabelField("Orange");
-            EditorGUILayout.LabelField("Pear");
+            if (selectedDialogue == null) EditorGUILayout.LabelField("No diaLOGUE selected");
+
+            else
+            {
+                EditorGUILayout.LabelField(selectedDialogue.name);
+            }
+
         }
+
+        private void OnEnable()
+        {
+            Selection.selectionChanged += OnSelectionChanged;
+        }
+
+        private void OnSelectionChanged()
+        {
+            Dialogue newDialogue = Selection.activeObject as Dialogue;
+            if (newDialogue != null)
+            {
+                selectedDialogue = newDialogue;
+                Repaint();
+            }
+        }
+
         [OnOpenAssetAttribute(1)]
         public static bool OnOpenAsset(int instanceID, int line)
         {
