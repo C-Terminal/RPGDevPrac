@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace RPG.Dialogue.Editor
     {
         Dialogue selectedDialogue = null;
         GUIStyle nodeStyle;
+        bool dragging = false;
 
         [MenuItem("Window/Dialogue Editor")]
         private static void ShowEditorWindow()
@@ -23,17 +25,39 @@ namespace RPG.Dialogue.Editor
 
             else
             {
+
+                ProcessEvents();
                 foreach (var node in selectedDialogue.GetAllNodes())
                 {
                     OnGuiNode(node);
                 }
             }
 
+
+        }
+
+        private void ProcessEvents()
+        {
+            //gets event that triggered on GUI to be called
+            if (Event.current.type == EventType.MouseDown && !dragging)
+            {
+                dragging = true;
+            }
+            else if (Event.current.type == EventType.MouseDrag && dragging)
+            {
+                Undo.RecordObject(selectedDialogue, "Move Dialogue Node");
+                selectedDialogue.GetRootNode().rect.position = Event.current.mousePosition;
+                Repaint();
+            }
+            else if (Event.current.type == EventType.MouseUp && dragging)
+            {
+                dragging = false;
+            }
         }
 
         private void OnGuiNode(DialogueNode node)
         {
-            GUILayout.BeginArea(node.position, nodeStyle);
+            GUILayout.BeginArea(node.rect, nodeStyle);
 
             EditorGUI.BeginChangeCheck();
 
