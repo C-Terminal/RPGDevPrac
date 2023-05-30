@@ -8,6 +8,7 @@ namespace RPG.Dialogue.Editor
     {
         Dialogue selectedDialogue = null;
 
+
         [MenuItem("Window/Dialogue Editor")]
         private static void ShowEditorWindow()
         {
@@ -22,9 +23,16 @@ namespace RPG.Dialogue.Editor
 
             else
             {
+
                 foreach (var node in selectedDialogue.GetAllNodes())
                 {
-                    EditorGUILayout.LabelField(node.text);
+                    string newText = EditorGUILayout.TextField(node.text);
+                    if (newText != node.text)
+                    {
+                        node.text = newText;
+                        EditorUtility.SetDirty(selectedDialogue);
+                    }
+
                 }
             }
 
