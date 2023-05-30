@@ -18,11 +18,14 @@ namespace RPG.Dialogue.Editor
 
         private void OnGUI()
         {
-            if (selectedDialogue == null) EditorGUILayout.LabelField("No diaLOGUE selected");
+            if (selectedDialogue == null) EditorGUILayout.LabelField("No Dialogue selected");
 
             else
             {
-                EditorGUILayout.LabelField(selectedDialogue.name);
+                foreach (var node in selectedDialogue.GetAllNodes())
+                {
+                    EditorGUILayout.LabelField(node.text);
+                }
             }
 
         }
