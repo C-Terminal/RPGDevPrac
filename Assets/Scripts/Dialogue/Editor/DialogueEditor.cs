@@ -30,9 +30,14 @@ namespace RPG.Dialogue.Editor
                 ProcessEvents();
                 foreach (var node in selectedDialogue.GetAllNodes())
                 {
-                    OnGuiNode(node);
+                    DrawConnections(node);
+                }
+                foreach (var node in selectedDialogue.GetAllNodes())
+                {
+                    DrawNode(node);
                 }
             }
+
 
 
         }
@@ -61,7 +66,7 @@ namespace RPG.Dialogue.Editor
             }
         }
 
-        private void OnGuiNode(DialogueNode node)
+        private void DrawNode(DialogueNode node)
         {
             GUILayout.BeginArea(node.rect, nodeStyle);
 
@@ -80,20 +85,32 @@ namespace RPG.Dialogue.Editor
                 node.uniqueID = newUniqueID;
             }
 
-            foreach (DialogueNode childNode in selectedDialogue.GetAllChildren(node))
-            {
-                EditorGUILayout.LabelField(childNode.text);
-            }
-
 
             GUILayout.EndArea();
         }
 
+        private void DrawConnections(DialogueNode node)
+        {
+            Vector3 startPosition = new Vector2(node.rect.xMax, node.rect.center.y);
+            foreach (DialogueNode childNode in selectedDialogue.GetAllChildren(node))
+            {
+                Vector3 endPosition = new Vector2(childNode.rect.xMin, childNode.rect.center.y);
+                Vector3 controlPointOffset = endPosition - startPosition;
+                controlPointOffset.y = 0;
+                controlPointOffset.x *= 0.8f;
+
+                Handles.DrawBezier(startPosition, endPosition,
+                startPosition + controlPointOffset,
+                endPosition - controlPointOffset,
+                Color.white, null, 4f);
+            }
+        }
         private void OnEnable()
         {
             Selection.selectionChanged += OnSelectionChanged;
 
             nodeStyle = new GUIStyle();
+
             //loading 2d texture included in unity
             nodeStyle.normal.background = EditorGUIUtility.Load("node0") as Texture2D;
             nodeStyle.padding = new RectOffset(20, 20, 20, 20);
