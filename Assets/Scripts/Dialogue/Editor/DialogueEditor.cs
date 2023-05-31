@@ -14,6 +14,8 @@ namespace RPG.Dialogue.Editor
         DialogueNode draggingNode = null;
         [NonSerialized]
         Vector2 draggingOffset;
+        [NonSerialized]
+        DialogueNode deletingNode = null;
 
         [NonSerialized]
         DialogueNode creatingNode = null;
@@ -47,6 +49,12 @@ namespace RPG.Dialogue.Editor
                     Undo.RecordObject(selectedDialogue, "added dialogue node");
                     selectedDialogue.CreateNode(creatingNode);
                     creatingNode = null;
+                }
+                if (deletingNode != null)
+                {
+                    Undo.RecordObject(selectedDialogue, "deleted dialogue node");
+                    selectedDialogue.DeleteNode(deletingNode);
+                    deletingNode = null;
                 }
             }
 
@@ -92,10 +100,18 @@ namespace RPG.Dialogue.Editor
                 node.text = newText;
             }
 
+            GUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("x"))
+            {
+                deletingNode = node;
+            }
             if (GUILayout.Button("+"))
             {
-                creatingNode = node;              
+                creatingNode = node;
             }
+
+            GUILayout.EndHorizontal();
 
             GUILayout.EndArea();
         }
