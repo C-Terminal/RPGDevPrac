@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace RPG.Dialogue
     {
         [SerializeField]
         List<DialogueNode> nodes = new List<DialogueNode>();
+        Dictionary<string, DialogueNode> nodeLookup = new Dictionary<string, DialogueNode>();
 
 #if UNITY_EDITOR 
         private void Awake()
@@ -16,9 +18,22 @@ namespace RPG.Dialogue
             {
                 nodes.Add(new DialogueNode());
             }
+            //never called normally in an exported game - this ensures it is
+            OnValidate();
 
         }
 #endif
+
+        //Called when change made in inspector or when scriptable object loaded
+        private void OnValidate()
+        {
+            nodeLookup.Clear();
+            foreach (DialogueNode node in GetAllNodes())
+            {
+                nodeLookup[node.uniqueID] = node;
+
+            }
+        }
         // any object that allows you to do a for-loop over them, or the contents are enumerable
         public IEnumerable<DialogueNode> GetAllNodes()
         {
@@ -28,6 +43,19 @@ namespace RPG.Dialogue
         public DialogueNode GetRootNode()
         {
             return nodes[0];
+        }
+
+        public IEnumerable<DialogueNode> GetAllChildren(DialogueNode parentNode)
+        {
+            foreach (var childID in parentNode.children)
+            {
+                if (nodeLookup.ContainsKey(childID))
+                {
+                    yield return nodeLookup[childID];
+                }
+
+            }
+
         }
     }
 }

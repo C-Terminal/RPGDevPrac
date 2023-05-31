@@ -24,7 +24,9 @@ MonoBehaviour:
       height: 100
   - uniqueID: 2
     text: editable
-    children: []
+    children:
+    - a
+    - b
     rect:
       serializedVersion: 2
       x: 248
@@ -32,6 +34,24 @@ MonoBehaviour:
       width: 200
       height: 100
   - uniqueID: 3
+    text: text
+    children: []
+    rect:
+      serializedVersion: 2
+      x: 418
+      y: 97
+      width: 200
+      height: 100
+  - uniqueID: b
+    text: test23
+    children: []
+    rect:
+      serializedVersion: 2
+      x: 418
+      y: 97
+      width: 200
+      height: 100
+  - uniqueID: a
     text: text
     children: []
     rect:

@@ -43,7 +43,7 @@ namespace RPG.Dialogue.Editor
             if (Event.current.type == EventType.MouseDown && draggingNode == null)
             {
                 draggingNode = GetNodeAtPoint(Event.current.mousePosition);
-                if( draggingNode != null)
+                if (draggingNode != null)
                 {
                     draggingOffset = draggingNode.rect.position - Event.current.mousePosition;
                 }
@@ -79,6 +79,12 @@ namespace RPG.Dialogue.Editor
                 node.text = newText;
                 node.uniqueID = newUniqueID;
             }
+
+            foreach (DialogueNode childNode in selectedDialogue.GetAllChildren(node))
+            {
+                EditorGUILayout.LabelField(childNode.text);
+            }
+
 
             GUILayout.EndArea();
         }
