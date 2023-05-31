@@ -16,7 +16,9 @@ namespace RPG.Dialogue
         {
             if (nodes.Count == 0)
             {
-                nodes.Add(new DialogueNode());
+                DialogueNode rootNode = new DialogueNode();
+                rootNode.uniqueID = System.Guid.NewGuid().ToString();
+                nodes.Add(rootNode);
             }
             //never called normally in an exported game - this ensures it is
             OnValidate();
@@ -56,6 +58,15 @@ namespace RPG.Dialogue
 
             }
 
+        }
+
+        public void CreateNode(DialogueNode parent)
+        {
+            DialogueNode newNode = new DialogueNode();
+            newNode.uniqueID = System.Guid.NewGuid().ToString();
+            parent.children.Add(newNode.uniqueID);
+            nodes.Add(newNode);
+            OnValidate();
         }
     }
 }
