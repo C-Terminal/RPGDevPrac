@@ -15,11 +15,12 @@ MonoBehaviour:
   nodes:
   - uniqueID: 
     text: Persistent
-    children: []
+    children:
+    - 3
     rect:
       serializedVersion: 2
-      x: 131
-      y: 180
+      x: 85
+      y: 209
       width: 200
       height: 100
   - uniqueID: 2
@@ -29,26 +30,28 @@ MonoBehaviour:
     - b
     rect:
       serializedVersion: 2
-      x: 206
-      y: 402
+      x: 141
+      y: 428
       width: 200
       height: 200
   - uniqueID: 3
     text: text
-    children: []
+    children:
+    - 588c7ce2-670e-4aba-acd5-2988d6e21430
     rect:
       serializedVersion: 2
-      x: 418
-      y: 97
+      x: 365
+      y: 126
       width: 200
       height: 100
   - uniqueID: b
     text: test23
-    children: []
+    children:
+    - 588c7ce2-670e-4aba-acd5-2988d6e21430
     rect:
       serializedVersion: 2
-      x: 540
-      y: 513
+      x: 440
+      y: 566
       width: 200
       height: 100
   - uniqueID: a
@@ -56,7 +59,16 @@ MonoBehaviour:
     children: []
     rect:
       serializedVersion: 2
-      x: 655
-      y: 326
+      x: 381
+      y: 369
+      width: 200
+      height: 100
+  - uniqueID: 588c7ce2-670e-4aba-acd5-2988d6e21430
+    text: 
+    children: []
+    rect:
+      serializedVersion: 2
+      x: 669
+      y: 256
       width: 200
       height: 100

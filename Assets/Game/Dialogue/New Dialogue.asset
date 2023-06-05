@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c66fcbc6963f084dae0c8672355e7aa, type: 3}
-  m_Name: Add node test
+  m_Name: New Dialogue
   m_EditorClassIdentifier: 
   nodes:
-  - uniqueID: 054adb1b-576d-4f3c-a89e-a731372fd665
+  - uniqueID: 3d569f85-1223-45d3-a0ef-21a206342434
     text: 
     children: []
     rect:

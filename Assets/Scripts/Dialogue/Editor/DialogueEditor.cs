@@ -16,9 +16,13 @@ namespace RPG.Dialogue.Editor
         Vector2 draggingOffset;
         [NonSerialized]
         DialogueNode deletingNode = null;
+        [NonSerialized]
+        DialogueNode linkingParentNode = null;
+        Vector2 scrollPosition;
 
         [NonSerialized]
         DialogueNode creatingNode = null;
+        
 
         [MenuItem("Window/Dialogue Editor")]
         private static void ShowEditorWindow()
@@ -36,6 +40,17 @@ namespace RPG.Dialogue.Editor
             {
 
                 ProcessEvents();
+
+                /*
+                * Scroll view requires an auto generated shape to work with.
+                * Utilizing a GetRect(LargeFloat, LargeFloat) function that reserves space within the Scroll view 
+                * is one way to fulfill this requirement
+                *
+                */
+                scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
+                GUILayoutUtility.GetRect(4000,4000);
+
                 foreach (var node in selectedDialogue.GetAllNodes())
                 {
                     DrawConnections(node);
@@ -44,6 +59,9 @@ namespace RPG.Dialogue.Editor
                 {
                     DrawNode(node);
                 }
+
+                EditorGUILayout.EndScrollView();
+
                 if (creatingNode != null)
                 {
                     Undo.RecordObject(selectedDialogue, "added dialogue node");
@@ -61,11 +79,11 @@ namespace RPG.Dialogue.Editor
         }
 
         private void ProcessEvents()
-        {
+        { 
             //gets event that triggered on GUI to be called
             if (Event.current.type == EventType.MouseDown && draggingNode == null)
             {
-                draggingNode = GetNodeAtPoint(Event.current.mousePosition);
+                draggingNode = GetNodeAtPoint(Event.current.mousePosition + scrollPosition);
                 if (draggingNode != null)
                 {
                     draggingOffset = draggingNode.rect.position - Event.current.mousePosition;
@@ -105,6 +123,22 @@ namespace RPG.Dialogue.Editor
             if (GUILayout.Button("x"))
             {
                 deletingNode = node;
+            }
+            if (linkingParentNode == null)
+            {
+                if (GUILayout.Button("Link"))
+                {
+                    linkingParentNode = node;
+                }
+            }
+            else
+            {
+                if (GUILayout.Button("child"))
+                {
+                    Undo.RecordObject(selectedDialogue, "Add Dialogue Link");
+                    linkingParentNode.children.Add(node.uniqueID);
+                    linkingParentNode = null;
+                }
             }
             if (GUILayout.Button("+"))
             {
