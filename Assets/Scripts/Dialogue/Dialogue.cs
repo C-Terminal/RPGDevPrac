@@ -6,7 +6,7 @@ using UnityEditor;
 namespace RPG.Dialogue
 {
     [CreateAssetMenu(fileName = "New Dialogue", menuName = "Dialogue", order = 0)]
-    public class Dialogue : ScriptableObject
+    public class Dialogue : ScriptableObject, ISerializationCallbackReceiver
     {
         [SerializeField]
         List<DialogueNode> nodes = new List<DialogueNode>();
@@ -15,19 +15,18 @@ namespace RPG.Dialogue
 #if UNITY_EDITOR 
         private void Awake()
         {
-            if (nodes.Count == 0)
-            {
-                CreateNode(null);
-            }
             //never called normally in an exported game - this ensures it is
             OnValidate();
-
         }
 #endif
 
         //Called when change made in inspector or when scriptable object loaded
         private void OnValidate()
         {
+            if (nodes.Count == 0)
+            {
+                CreateNode(null);
+            }
             nodeLookup.Clear();
             foreach (DialogueNode node in GetAllNodes())
             {
@@ -86,6 +85,27 @@ namespace RPG.Dialogue
             {
                 node.children.Remove(nodeToDelete.name);
             }
+        }
+
+        public void OnBeforeSerialize()
+        {
+            //
+            if (AssetDatabase.GetAssetPath(this) != "")
+            {
+                foreach (DialogueNode node in GetAllNodes())
+                {
+                    if (AssetDatabase.GetAssetPath(node) == "")
+                    {
+                        AssetDatabase.AddObjectToAsset(node, this);
+
+                    }
+                }
+            }
+        }
+
+        public void OnAfterDeserialize()
+        {
+
         }
     }
 }
