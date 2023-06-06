@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -9,12 +10,16 @@ namespace RPG.Dialogue
     public class DialogueNode : ScriptableObject
     {
 
+        // TODO: refactor into ENUM or some other data struct to allow for references to arbitrary amount of speakers. 
+        [SerializeField]
+        bool isPlayerSpeaking = false;
         [SerializeField]
         string text;
         [SerializeField]
         List<string> children = new List<string>();
         [SerializeField]
         Rect rect = new Rect(0, 0, 200, 100);
+
 
         public Rect GetRect()
         {
@@ -29,6 +34,11 @@ namespace RPG.Dialogue
         public List<string> GetChildren()
         {
             return children;
+        }
+
+        public bool IsPlayerSpeaking()
+        {
+            return isPlayerSpeaking;
         }
 
 #if UNITY_EDITOR
@@ -63,6 +73,14 @@ namespace RPG.Dialogue
             children.Remove(childID);
             EditorUtility.SetDirty(this);
         }
+
+        public void SetPlayerSpeaking(bool newIsPlayerSpeaking)
+        {
+            Undo.RecordObject(this, "Change Dialogue Speaker");
+            isPlayerSpeaking = newIsPlayerSpeaking;
+            EditorUtility.SetDirty(this);
+        }
+
 #endif
 
     }

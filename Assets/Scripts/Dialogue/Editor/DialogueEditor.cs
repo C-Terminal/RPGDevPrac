@@ -9,7 +9,7 @@ namespace RPG.Dialogue.Editor
     {
         Dialogue selectedDialogue = null;
         [NonSerialized]
-        GUIStyle nodeStyle;
+        GUIStyle nodeStyle, playerNodeStyle;
         [NonSerialized]
         DialogueNode draggingNode = null;
         [NonSerialized]
@@ -131,7 +131,13 @@ namespace RPG.Dialogue.Editor
 
         private void DrawNode(DialogueNode node)
         {
-            GUILayout.BeginArea(node.GetRect(), nodeStyle);
+            GUIStyle style = nodeStyle;
+            if (node.IsPlayerSpeaking())
+            {
+                style = playerNodeStyle;
+            }
+            GUILayout.BeginArea(node.GetRect(), style);
+            EditorGUI.BeginChangeCheck();
 
             node.SetText(EditorGUILayout.TextField(node.GetText()));
 
@@ -209,11 +215,16 @@ namespace RPG.Dialogue.Editor
             Selection.selectionChanged += OnSelectionChanged;
 
             nodeStyle = new GUIStyle();
-
             //loading 2d texture included in unity
             nodeStyle.normal.background = EditorGUIUtility.Load("node0") as Texture2D;
             nodeStyle.padding = new RectOffset(20, 20, 20, 20);
             nodeStyle.border = new RectOffset(12, 12, 12, 12);
+
+            playerNodeStyle = new GUIStyle();
+            playerNodeStyle.normal.background = EditorGUIUtility.Load("node1") as Texture2D;
+            playerNodeStyle.normal.textColor = Color.white;
+            playerNodeStyle.padding = new RectOffset(20, 20, 20, 20);
+            playerNodeStyle.border = new RectOffset(12, 12, 12, 12);
         }
 
         private void OnSelectionChanged()
